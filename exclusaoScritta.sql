@@ -1,6 +1,7 @@
 /*
 	Script para exclusão das empresas do módulo Scritta por uuid
 	coloque as chaves da empresa no array empresa_nome
+	Testado com sucesso na 12235.13
 */
 
 DO $$
@@ -12,7 +13,7 @@ empresa_nome UUID[];
 
 begin
 
-empresa_nome = array['2e68cf48-b014-4915-b5d8-4d5edbba96a2']::uuid[];
+empresa_nome = array['COLOQUE AS CHAVES DAS EMPRESAS AQUI - (select * from ns.empresas)']::uuid[];
 
 
 delete from estoque.itens_mov where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos
@@ -41,6 +42,8 @@ delete from financas.itenschequespagamentos where id_titulo IN (Select id from f
 delete from financas.titulos where id_estabelecimento IN (select estabelecimento from ns.estabelecimentos where empresa=any(empresa_nome));
 
 delete from estoque.itens_mov where id_docfis IN (Select id from ns.df_docfis where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos where empresa=any(empresa_nome)));
+
+delete from estoque.itens_mov where id_itemdocfis in (select id from ns.df_itens where id_docfis IN (Select id from ns.df_docfis where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos where empresa=any(empresa_nome))));
 
 delete from ns.df_itens where id_docfis IN (Select id from ns.df_docfis where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos where empresa=any(empresa_nome)));
 
@@ -83,4 +86,3 @@ delete from scritta.uniprofissionais where id_estabelecimento IN (Select estabel
 
 
 END; $$
-
