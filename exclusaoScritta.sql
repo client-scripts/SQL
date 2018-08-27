@@ -13,7 +13,7 @@ empresa_nome UUID[];
 
 begin
 
-empresa_nome = array['COLOQUE AS CHAVES DAS EMPRESAS AQUI - (select * from ns.empresas)']::uuid[];
+empresa_nome = array['COLOCAR UUID DAS EMPRESAS AQUI - SELECT EMPRESA FROM NS.EMPRESAS']::uuid[];
 
 
 delete from estoque.itens_mov where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos
@@ -84,5 +84,6 @@ delete from scritta.grec_cfg where id_estabelecimento IN (Select estabelecimento
 
 delete from scritta.uniprofissionais where id_estabelecimento IN (Select estabelecimento from ns.estabelecimentos where empresa=any(empresa_nome));	
 
+delete from scritta.lf_lanfis where id_estabelecimento in (select estabelecimento from ns.estabelecimentos where empresa in (select empresa from ns.empresas where empresa=any(empresa_nome)));
 
 END; $$
