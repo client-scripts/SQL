@@ -7,7 +7,7 @@ DO $$
 
 DECLARE 
 empresa_nome UUID[];
-
+umaempresa UUID;
 
 begin
 empresa_nome = array['COLOCAR UUID DAS EMPRESAS AQUI - SELECT EMPRESA FROM NS.EMPRESAS']::uuid[];
@@ -18,7 +18,6 @@ where empresa= any(empresa_nome);
 delete from persona.mudancastrabalhadores
 where trabalhador in(select trabalhador from persona.trabalhadores
 where empresa= any(empresa_nome));
-
 
 --deletando todos detalhamentos de calculos trabalhadores 
 delete  from persona.detalhamentoscalculostrabalhadores
@@ -355,6 +354,15 @@ delete FROM PERSONA.RELATORIOSGRAVADOSEMPRESAS WHERE EMPRESA= any(empresa_nome);
 delete from persona.cargos
 where empresa= any(empresa_nome);
 
+--deletando feriados
+delete from ns.feriados
+where estabelecimento in (select estabelecimento from ns.estabelecimentos
+        where empresa = any(empresa_nome));
+
+delete from ns.feriados
+where lotacao in (select lotacao from persona.lotacoes
+        where empresa = any(empresa_nome));
+
 --deletando lotações
 delete from persona.lotacoes
 where empresa= any(empresa_nome);
@@ -387,7 +395,9 @@ delete from persona.eventos
 where empresa in(select empresa from ns.empresas 
     where empresa = any(empresa_nome));
 
-select persona.rubricaspadroes(any(empresa_nome));
+foreach umaempresa in array empresa_nome loop 
+    perform persona.rubricaspadroes(umaempresa);
+end loop;
 
 delete FROM persona.planossaude 
 where empresa = any(empresa_nome);
