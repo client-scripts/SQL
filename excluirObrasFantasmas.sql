@@ -1,4 +1,8 @@
-/*Exclui as Obras Fantasmas que não possuem vínculo no Persona*/
+/*
+  Não está apagando
+  utilizar script apagarObras
+  Exclui as Obras Fantasmas que não possuem vínculo no Persona
+*/
 
 do
 $$
@@ -38,8 +42,8 @@ raise notice 'Apagando obras sem vinculo com Persona.';
 delete from  ns.obras where 
 id not in (select obra from persona.codigossefipgpsobras group by obra) and
 id not in (select obra from persona.historicosgpsobrasestabelecimentos group by obra) and
-id not in (select obra from persona.lotacoes group by obra) and
-id not in (select id_obra from ns.df_docfis group by id_obra);
+id not in (select obra from persona.lotacoes group by obra) /*and
+id not in (select id_obra from ns.df_docfis group by id_obra)*/;
 end;
 $$;
 
