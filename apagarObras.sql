@@ -36,7 +36,6 @@ begin
 		where id_obra = any(id_obras)
 	);
 
-
 	delete from ns.df_servicos 
 	where id_docfis in (
 		select id from ns.df_docfis
@@ -45,6 +44,9 @@ begin
 
 	delete from ns.df_docfis
 	where id_obra = any(id_obras);
+
+	delete from persona.historicosgpsobrasestabelecimentos
+	where obra = any(id_obras);
 
 	delete from ns.obras
 	where id = any(id_obras);
