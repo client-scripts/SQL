@@ -9,6 +9,9 @@ declare
 begin
 	id_obras = array['COLOCAR UUID DAS OBRAS AQUI - SELECT OBRA, ID FROM NS.OBRAS']::uuid[];
 
+	delete from scritta.lanaju
+	where id_obra = any(id_obras);
+
 	delete from financas.titulos	
 	where id_gps in (
 		select id from scritta.grec_gps
@@ -33,7 +36,6 @@ begin
 		where id_obra = any(id_obras)
 	);
 
-
 	delete from ns.df_servicos 
 	where id_docfis in (
 		select id from ns.df_docfis
@@ -42,6 +44,9 @@ begin
 
 	delete from ns.df_docfis
 	where id_obra = any(id_obras);
+
+	delete from persona.historicosgpsobrasestabelecimentos
+	where obra = any(id_obras);
 
 	delete from ns.obras
 	where id = any(id_obras);

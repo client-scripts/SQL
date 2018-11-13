@@ -24,6 +24,12 @@ where grupoempresarial in (
 	where codigo=any(grupo_nome)
 );
 
+delete from ns.configuracoes
+where grupoempresarial in (
+	select grupoempresarial from ns.gruposempresariais
+	where codigo=any(grupo_nome)
+);
+
 delete from ns.gruposempresariais
 where codigo=any(grupo_nome);
 
