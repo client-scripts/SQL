@@ -12,6 +12,13 @@ begin
 
 grupo_nome = array['COLOCAR CODIGO DAS EMPRESAS AQUI - SELECT CODIGO FROM NS.GRUPOSEMPRESARIAIS']::varchar[];
 
+delete from financas.rateiosfinanceiros
+where classificacaofinanceira in ( select classificacaofinanceira from financas.classificacoesfianceiras 
+	where grupoempresarial in (
+	select grupoempresarial from ns.gruposempresariais 
+	where codigo=any(grupo_nome)
+);
+
 delete from financas.classificacoesfinanceiras
 where grupoempresarial in (
 	select grupoempresarial from ns.gruposempresariais 
